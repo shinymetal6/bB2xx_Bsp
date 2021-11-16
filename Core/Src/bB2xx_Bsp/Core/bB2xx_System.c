@@ -54,17 +54,17 @@ void InitSystemVars(void)
 	bzero((uint8_t *)&SystemVar,sizeof(SystemVar));
 }
 
+
 void bB2xx_Init(void)
 {
 	CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
 	DWT->CYCCNT = 0;
 	DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
 
+	InitSystemVars();
 	bB2xx_flash_init();
 	bB2xx_flash_get_sysparams();
-	//bB2xx_flash_store_bluedigits();
 
-	InitSystemVars();
 	InitSystemTimers();
 	LD1_OnOff(LED_ON);
 	LD7_OnOff(LED_ON);
@@ -73,8 +73,10 @@ void bB2xx_Init(void)
 	ILI9341_Init();
 	ILI9341_FillScreen(ILI9341_BLACK);
 	ILI9341_WriteString(0,0,"bB2xx BSP",Font_11x18,ILI9341_RED,ILI9341_BLACK);
-	ILI9341_DrawBitmap(16,128,(uint8_t *)&ram_blue_digits[2]);
 	ILI9341_SetBrightness(50);
+	MenuDisplayInit();
+	check_file();
+	ILI9341_DrawBitmap(16,128,(uint8_t *)&ram_green_digits[5]);
 
 	InitDac();
 	InitSPDIF();
@@ -87,6 +89,8 @@ void bB2xx_Init(void)
 	LD1_OnOff(LED_OFF);
 	LD7_OnOff(LED_OFF);
 	LD8_OnOff(LED_OFF);
+
+
 }
 
 void bB2xx_Set_NO_MicroSD_Flag(void)
@@ -116,10 +120,18 @@ void bB2xx_Loop(void)
 	}
 	if (( SystemVar.timers_flag & TIMER_100MS_FLAG ) == TIMER_100MS_FLAG)
 	{
-		HAL_GPIO_WritePin(FLAG_GPIO_Port, FLAG_Pin, GPIO_PIN_SET);
 		SystemVar.timers_flag &= ~TIMER_100MS_FLAG;
 		I2S_GetAudioBuf();
-		HAL_GPIO_WritePin(FLAG_GPIO_Port, FLAG_Pin, GPIO_PIN_RESET);
+	}
+	if (( SystemVar.encoder_flags & ENCODER_ROTATION_FLAG ) == ENCODER_ROTATION_FLAG)
+	{
+		MenuEncoderNavigate();
+		SystemVar.encoder_flags &= ~ENCODER_ROTATION_FLAG;
+	}
+	if (( SystemVar.encoder_flags & ENCODER_SW_FLAG ) == ENCODER_SW_FLAG)
+	{
+		MeuEncoderChangeMenu();
+		SystemVar.encoder_flags &= ~ENCODER_SW_FLAG;
 	}
 
 }

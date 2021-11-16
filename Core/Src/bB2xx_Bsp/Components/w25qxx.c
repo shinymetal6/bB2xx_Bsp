@@ -84,8 +84,25 @@ void w25qxx_ReadBytes(uint8_t* pBuffer, uint32_t Address, uint32_t size)
 {
 	HAL_GPIO_WritePin(FLASH_SS_GPIO_Port,FLASH_SS_Pin,GPIO_PIN_RESET);
 	send_cmd_addr(READ_COMMAND,Address);
-	//w25qxx_SpiTX(0);
 	HAL_SPI_Receive(&FLASH_SPI_PORT,pBuffer,size,2000);
+	HAL_GPIO_WritePin(FLASH_SS_GPIO_Port,FLASH_SS_Pin,GPIO_PIN_SET);
+}
+
+void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
+{
+	SystemVar.flash_flags &= ~FLASH_DMARUNNING_FLAG;
+}
+
+void w25qxx_ReadBytesDMA(uint8_t* pBuffer, uint32_t Address, uint32_t size)
+{
+	HAL_GPIO_WritePin(FLASH_SS_GPIO_Port,FLASH_SS_Pin,GPIO_PIN_RESET);
+	send_cmd_addr(READ_COMMAND,Address);
+	SystemVar.flash_flags |= FLASH_DMARUNNING_FLAG;
+	HAL_SPI_Receive_DMA(&FLASH_SPI_PORT,pBuffer,size);
+	HAL_GPIO_WritePin(FLAG_GPIO_Port, FLAG_Pin, GPIO_PIN_SET);
+	while ((SystemVar.flash_flags & FLASH_DMARUNNING_FLAG) == FLASH_DMARUNNING_FLAG);
+	HAL_GPIO_WritePin(FLAG_GPIO_Port, FLAG_Pin, GPIO_PIN_RESET);
+
 	HAL_GPIO_WritePin(FLASH_SS_GPIO_Port,FLASH_SS_Pin,GPIO_PIN_SET);
 }
 

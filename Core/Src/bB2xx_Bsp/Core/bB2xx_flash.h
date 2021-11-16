@@ -19,6 +19,7 @@ typedef struct {
 	uint32_t					digitred_pointer;
 	uint32_t					digitgreen_pointer;
 	uint32_t					digityellow_pointer;
+	uint32_t					digitorange_pointer;
 	uint32_t					splashimage_pointer;
 	SystemParameters_TypeDef	SystemParameters;
 }FlashConfig_TypeDef;
@@ -39,6 +40,7 @@ typedef struct {
  * 						0xf14000 - 0xf1dfff : red digits
  * 						0xf1e000 - 0xf27fff : green digits
  * 						0xf28000 - 0xf31fff : yellow digits
+ * 						0xf32000 - 0xf31fff : orange digits
  * 						0xf3c000 -          : logo
  * 0x000000 - 0xefffff : samples , 3584 sectors
  */
@@ -51,12 +53,21 @@ typedef struct {
 #define		RED_DIGIT_FPTR		(BLUE_DIGIT_FPTR+SECTOR_SIZE*10)
 #define		GREEN_DIGIT_FPTR	(RED_DIGIT_FPTR+SECTOR_SIZE*10)
 #define		YELLOW_DIGIT_FPTR	(GREEN_DIGIT_FPTR+SECTOR_SIZE*10)
-#define		LOGO_FPTR			(YELLOW_DIGIT_FPTR+SECTOR_SIZE*10)
+#define		ORANGE_DIGIT_FPTR	(YELLOW_DIGIT_FPTR+SECTOR_SIZE*10)
+#define		LOGO_FPTR			(ORANGE_DIGIT_FPTR+SECTOR_SIZE*10)
+
+#define		DIGIT_BLUE_IDX		0
+#define		DIGIT_RED_IDX		1
+#define		DIGIT_GREEN_IDX		2
+#define		DIGIT_YELLOW_IDX	3
+#define		DIGIT_ORANGE_IDX	4
 
 #define		SAMPLE_PTR_F128		0
 
 extern	uint8_t bB2xx_flash_init(void);
 extern	void bB2xx_flash_get_sysparams(void);
 extern	void bB2xx_flash_store_sysparams(void);
+extern	void bB2xx_flash_store_digits( void );
+
 
 #endif /* SRC_BB2XX_BSP_CORE_BB2XX_FLASH_H_ */

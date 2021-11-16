@@ -9,6 +9,7 @@
 #define SRC_BB2XX_BSP_CORE_BB2XX_SYSTEM_H_
 
 #include	"Components/ili9341.h"
+#include	"Hmi/menus.h"
 
 /*
 Regions
@@ -58,6 +59,7 @@ typedef struct {
 	uint8_t			tim100msec_counter;
 	uint8_t			tim1Sec_counter;
 	uint8_t			microsd_flags;
+	uint8_t			flash_flags;
 	uint8_t			lcd_flags;
 	uint8_t 		touch_flags;
 	uint8_t 		touch_disable_window;
@@ -70,7 +72,10 @@ typedef struct {
 	uint8_t			current_brightness;
 	uint8_t			audio_flags;
 	int16_t			rvar[4];
-	uint8_t			mdma_flags;
+	uint8_t			menu_state;
+	uint8_t			next_menu_item;
+	uint8_t			selected_menu_item;
+	Menu_TypeDef 	*current_menu;
 }SystemVar_TypeDef;
 
 /* timers_flag */
@@ -78,6 +83,8 @@ typedef struct {
 #define	TIMER_1SEC_FLAG				0x02
 /* microsd_flags */
 #define	MICROSD_NOT_PRESENT_FLAG	0x80
+/* flash_flags */
+#define	FLASH_DMARUNNING_FLAG		0x80
 /* lcd_flags */
 #define	LCD_DMA_BUSY_FLAG			0x80
 /* touch_flags */

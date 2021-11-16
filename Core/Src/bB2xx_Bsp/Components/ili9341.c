@@ -288,8 +288,8 @@ void ILI9341_Init() {
     ILI9341_Select();
     ILI9341_WriteCommand(0x36);
     {
-        //uint8_t data[] = { ILI9341_ROTATION };
-        uint8_t data[] = { 0x40 };
+        uint8_t data[] = { ILI9341_ROTATION };
+        //uint8_t data[] = { 0x40 };
         ILI9341_WriteData(data, sizeof(data));
     }
     ILI9341_Unselect();
@@ -479,12 +479,15 @@ uint16_t w, h;
 	w = *(volatile uint16_t *) (pbmp + 18);
 	h = *(volatile uint16_t *) (pbmp + 22);
 	pbmp += index;
-	pbmp -= 1;
+	pbmp += 1;
+	w -= 1;
+	h -= 1;
 
 	ILI9341_Select();
-	ILI9341_SetAddressWindow(x, y, x+w-1, y+h-1);
-	ILI9341_WriteDmaData((uint8_t*)pbmp, size*4);
-	//ILI9341_WriteData((uint8_t*)pbmp, size*2);
+	ILI9341_SetAddressWindow(x, y, x+w, y+h);
+	//ILI9341_WriteDmaData((uint8_t*)pbmp, size*4);
+	//ILI9341_WriteData((uint8_t*)pbmp, (size*2)-1);
+	ILI9341_WriteData((uint8_t*)pbmp, size*2);
 
 #ifdef asdf
   /* Set GRAM write direction and BGR = 0 */

@@ -33,6 +33,7 @@ extern	SPI_HandleTypeDef 	hspi4;
 extern	uint32_t w25qxx_ReadID(void);
 extern	void w25qxx_EraseSector(uint32_t Sector);
 extern	void w25qxx_WriteBytes(uint8_t* pBuffer, uint32_t Address, uint32_t size);
+extern	void w25qxx_ReadBytesDMA(uint8_t* pBuffer, uint32_t Address, uint32_t size);
 extern	void w25qxx_ReadBytes(uint8_t* pBuffer, uint32_t Address, uint32_t size);
 extern	uint32_t	w25qxx_AddressToSector(uint32_t	Address);
 

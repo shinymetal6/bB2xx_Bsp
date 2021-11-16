@@ -338,8 +338,8 @@ int     single_size;
 
     fprintf(fpout,"#ifndef SRC_BB2XX_BSP_IMAGES_DIGITS_H_\n");
     fprintf(fpout,"#define SRC_BB2XX_BSP_IMAGES_DIGITS_H_\n\n");
-    fprintf(fpout,"#define  DIGITS_X    28\n");
-    fprintf(fpout,"#define  DIGITS_Y    50\n");
+    fprintf(fpout,"#define  DIGITS_X    30\n");
+    fprintf(fpout,"#define  DIGITS_Y    54\n");
     fprintf(fpout,"extern const uint8_t blue_digits[10][%d];\n",single_size);
     fprintf(fpout,"extern const uint8_t green_digits[10][%d];\n",single_size);
     fprintf(fpout,"extern const uint8_t red_digits[10][%d];\n\n",single_size);
